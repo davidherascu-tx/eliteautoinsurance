@@ -1,26 +1,130 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Base surface — the requested #111D32 and shades built around it */
+  --color-navy-950: #0a1120;
+  --color-navy-900: #111d32;
+  --color-navy-850: #16243c;
+  --color-navy-800: #1b2c47;
+  --color-navy-700: #253a5b;
+  --color-navy-600: #35507a;
+
+  /* Brand blue, sampled from the logo */
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9ebff;
+  --color-brand-200: #bcdcff;
+  --color-brand-300: #8ec6ff;
+  --color-brand-400: #59a5fb;
+  --color-brand-500: #3382f2;
+  --color-brand-600: #1663d8;
+  --color-brand-700: #124fae;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-navy-900);
+    color: #e8eef7;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-600);
+    color: #ffffff;
+  }
+
+  /* Keep anchored sections clear of the floating nav */
+  :target {
+    scroll-margin-top: 8rem;
+  }
+
+  /* Dark form controls */
+  select option {
+    background-color: var(--color-navy-850);
+    color: #e8eef7;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------------------------------------------------------------
+   Scroll reveal
+
+   The hidden state is gated on `scripting: enabled`, so a browser
+   with JavaScript off (or too old to know the query) never hides
+   anything and the page reads normally. JS then flips
+   `data-visible` as each element scrolls into view.
+   --------------------------------------------------------------- */
+@media (scripting: enabled) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  [data-reveal="left"] {
+    transform: translateX(-28px);
+  }
+
+  [data-reveal="right"] {
+    transform: translateX(28px);
+  }
+
+  [data-reveal="scale"] {
+    transform: scale(0.96);
+  }
+
+  [data-reveal][data-visible="true"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-reveal][data-visible="true"] {
+    transition: none;
+  }
+}
+
+/* Soft ambient glow used behind hero sections */
+@utility glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+/*
+ * Feathers an image's edges to transparent so a dark photo melts into the dark
+ * background instead of sitting in a visible box.
+ */
+@utility blend-edges {
+  -webkit-mask-image: radial-gradient(
+    ellipse 82% 80% at 50% 46%,
+    #000 54%,
+    rgba(0, 0, 0, 0.5) 78%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 82% 80% at 50% 46%,
+    #000 54%,
+    rgba(0, 0, 0, 0.5) 78%,
+    transparent 100%
+  );
 }

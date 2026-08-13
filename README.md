@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Elite Auto Insurance
 
-## Getting Started
+Marketing site for Elite Auto Insurance, an independent insurance agency in the Houston area. Built with Next.js 16 (App Router, Turbopack), React 19 and Tailwind CSS v4. Quote requests are delivered by email through [Resend](https://resend.com).
 
-First, run the development server:
+## Getting started
 
 ```bash
+npm install
+cp .env.example .env.local   # then fill in the values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The site runs at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable           | Required | Purpose                                                                                     |
+| ------------------ | -------- | ------------------------------------------------------------------------------------------- |
+| `RESEND_API_KEY`   | Yes      | Resend API key. Without it the quote form shows a "call us instead" message and sends nothing. |
+| `QUOTE_TO_EMAIL`   | No       | Inbox that receives quote requests. Defaults to `quote@eliteautoinsurance.net`.               |
+| `QUOTE_FROM_EMAIL` | No       | Sender address. Must be on a domain verified in Resend.                                       |
 
-## Learn More
+To send from `quote@eliteautoinsurance.net`, add and verify `eliteautoinsurance.net` in the Resend dashboard (DNS records for SPF/DKIM). Until that is done, use `onboarding@resend.dev` as the sender — the default when `QUOTE_FROM_EMAIL` is unset.
 
-To learn more about Next.js, take a look at the following resources:
+## Editing site content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Almost all copy, contact details and coverage information live in one file: [`lib/site.ts`](lib/site.ts).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Phone, email, Facebook, tagline** — the `site` object
+- **Office addresses and open hours** — the `locations` array
+- **The six insurance lines** — the `coverageLines` array. Each entry drives its own page at `/coverage/<slug>`, its home-page card, the header dropdown, the footer list, the sitemap and the quote form's dropdown. Adding an entry creates a new page automatically.
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+app/
+  layout.tsx            Root layout, metadata, LocalBusiness JSON-LD
+  page.tsx              Home
+  about/                About the agency
+  contact/              Three offices, addresses and hours
+  coverage/             Coverage overview
+  coverage/[slug]/      One page per insurance line (statically generated)
+  quote/                Quote request page
+  sitemap.ts, robots.ts SEO files
+components/             Header, footer, quote form, cards, shared UI
+lib/
+  site.ts               Company data — edit content here
+  quote.ts              Quote form shape and server-side validation
+  actions.ts            'use server' action that sends the email via Resend
+public/                 Images and logo
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## The quote form
+
+The form posts to a Server Action (`submitQuote` in [`lib/actions.ts`](lib/actions.ts)) rather than an API route, so it works before JavaScript hydrates. On submit it:
+
+1. Drops the request silently if the hidden honeypot field is filled (bot).
+2. Validates every field on the server — the browser's `required` attributes are only a convenience.
+3. Emails the agency, with the customer's address as `Reply-To` so replying goes straight to them.
+4. Emails the customer a confirmation, in Spanish if they selected Español. A failure here is logged but does not fail the submission.
+
+Field errors and entered values are returned to the form via `useActionState`, so a rejected submission never clears what the customer typed.
+
+## Commands
+
+```bash
+npm run dev     # development server
+npm run build   # production build
+npm run start   # serve the production build
+npm run lint    # eslint
+```

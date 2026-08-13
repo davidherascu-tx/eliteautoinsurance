@@ -45,10 +45,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = {
-  themeColor: "#111d32",
-};
-
 /** Local business structured data so the three offices show up in local search. */
 function StructuredData() {
   const data = {
@@ -92,15 +88,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      // globals.css sets `scroll-behavior: smooth` for in-page anchors. Next 16
-      // no longer overrides that during route changes unless this attribute is
-      // present, which left new pages opening at the old scroll position.
-      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-navy-900 font-sans">
+      <body className="flex min-h-full flex-col bg-white font-sans">
         <SiteHeader />
-        <main className="flex-1 pt-24 sm:pt-28">{children}</main>
+        <main className="flex-1">{children}</main>
         <SiteFooter />
         <StructuredData />
       </body>

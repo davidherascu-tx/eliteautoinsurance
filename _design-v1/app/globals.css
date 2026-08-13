@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  /* Pulled from the Elite Auto Insurance logo */
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9ebff;
+  --color-brand-200: #bcdcff;
+  --color-brand-300: #8ec6ff;
+  --color-brand-400: #59a5fb;
+  --color-brand-500: #3382f2;
+  --color-brand-600: #1663d8;
+  --color-brand-700: #124fae;
+  --color-brand-800: #12448c;
+  --color-brand-900: #143b73;
+  --color-ink-800: #1b2534;
+  --color-ink-900: #0d1522;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: var(--color-ink-900);
+  }
+
+  /* Keep anchored sections clear of the sticky header */
+  :target {
+    scroll-margin-top: 6rem;
+  }
+}
