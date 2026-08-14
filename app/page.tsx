@@ -28,7 +28,7 @@ const reasons = [
   },
   {
     title: "Every line under one roof",
-    text: "Auto, property, commercial, boat, umbrella and life — one agent who knows your whole picture, not six separate call centers.",
+    text: "Auto, property, commercial, trucking, boat, umbrella and life — one agent who knows your whole picture, not a separate call center for every policy.",
   },
   {
     title: "Se Habla Español",
@@ -89,8 +89,9 @@ function Hero() {
             <Reveal variant="up" delay={160}>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">
                 {site.name} is an independent agency writing auto, property,
-                commercial, boat, umbrella and life coverage. We compare
-                carriers for you and explain the difference in plain language.
+                commercial, trucking, boat, umbrella and life coverage. We
+                compare carriers for you and explain the difference in plain
+                language.
               </p>
             </Reveal>
 
@@ -153,7 +154,7 @@ function Hero() {
                 </span>
                 <span>
                   <span className="block text-xl font-bold leading-none text-white">
-                    6 lines
+                    {coverageLines.length} lines
                   </span>
                   <span className="mt-1 block text-xs text-slate-400">
                     of coverage, one agent
@@ -253,7 +254,7 @@ function CoverageGrid() {
                 <Highlight>insurance fields</Highlight>
               </>
             }
-            intro="Six lines of coverage, quoted across multiple carriers by agents who live and work in Houston."
+            intro="Seven lines of coverage, quoted across multiple carriers by agents who live and work in Houston."
             align="center"
           />
         </Reveal>

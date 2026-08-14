@@ -15,7 +15,7 @@ import { coverageLines, locations, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Get a Free Insurance Quote",
-  description: `Request a free, no-obligation insurance quote from ${site.name}. Auto, property, commercial, boat, umbrella and life coverage in Houston. Se habla español.`,
+  description: `Request a free, no-obligation insurance quote from ${site.name}. Auto, property, commercial, trucking, boat, umbrella and life coverage in Houston. Se habla español.`,
   alternates: { canonical: "/quote" },
 };
 

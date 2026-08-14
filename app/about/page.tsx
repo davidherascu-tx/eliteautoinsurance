@@ -57,11 +57,11 @@ export default function AboutPage() {
                 <div className="mt-8 space-y-5 leading-relaxed text-slate-400">
                   <p>
                     {site.name} writes every major personal and commercial line
-                    — auto, property, commercial, boat, umbrella and life —
-                    through a range of carriers. Having all of it under one roof
-                    means one agent can see where your coverage overlaps, where
-                    it leaves a hole, and where you are paying twice for the
-                    same protection.
+                    — auto, property, commercial, trucking, boat, umbrella and
+                    life — through a range of carriers. Having all of it under
+                    one roof means one agent can see where your coverage
+                    overlaps, where it leaves a hole, and where you are paying
+                    twice for the same protection.
                   </p>
                   <p>
                     We serve {site.areaServed} from three offices, and the whole
@@ -76,7 +76,7 @@ export default function AboutPage() {
                   <CheckList
                     items={[
                       "Independent — we represent you, not one carrier",
-                      "All six lines of coverage handled by one agent",
+                      "All seven lines of coverage handled by one agent",
                       "Se habla español, de la cotización al reclamo",
                       "Same-day proof of insurance, SR-22s and certificates",
                       "Coverage reviewed at renewal, not just at signup",

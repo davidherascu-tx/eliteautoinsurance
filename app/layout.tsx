@@ -98,7 +98,17 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-navy-900 font-sans">
+      {/*
+        Browser extensions (ColorZilla, Grammarly, password managers) inject
+        their own attributes onto <body> before React hydrates, which React
+        reports as a hydration mismatch. Nothing here renders differently on the
+        server and client, so this only silences that extension noise — and only
+        for <body>'s own attributes, not for anything inside it.
+      */}
+      <body
+        suppressHydrationWarning
+        className="flex min-h-full flex-col bg-navy-900 font-sans"
+      >
         <SiteHeader />
         <main className="flex-1 pt-24 sm:pt-28">{children}</main>
         <SiteFooter />

@@ -17,7 +17,7 @@ import { coverageLines, site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Insurance Coverage",
   description:
-    "Auto, property, commercial, boat, umbrella and life insurance from an independent Houston agency. Compare carriers and get a free quote.",
+    "Auto, property, commercial, trucking, boat, umbrella and life insurance from an independent Houston agency. Compare carriers and get a free quote.",
   alternates: { canonical: "/coverage" },
 };
 
@@ -28,7 +28,7 @@ export default function CoveragePage() {
         eyebrow="Coverage"
         icon={<ShieldIcon className="size-4" />}
         title={<>We&rsquo;re covering all the insurance fields</>}
-        intro="Six lines of coverage written through multiple carriers. Pick the one you need — or ask us to review everything at once and look for bundle discounts."
+        intro="Seven lines of coverage written through multiple carriers. Pick the one you need — or ask us to review everything at once and look for bundle discounts."
         image={{
           src: "/shield.jpg",
           alt: "Hands protecting a shield icon representing home, auto and business coverage",

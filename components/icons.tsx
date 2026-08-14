@@ -45,6 +45,21 @@ export function BuildingIcon({ className = "" }: IconProps) {
   );
 }
 
+export function TruckIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true" className={className} {...strokeProps}>
+      <path d="M3 22.5V9A1.5 1.5 0 0 1 4.5 7.5h11A1.5 1.5 0 0 1 17 9v13.5" />
+      <path d="M17 12A1.5 1.5 0 0 1 18.5 10.5h3.9l2.7 5.4h1.4A1.5 1.5 0 0 1 28 17.4v5.1" />
+      <path d="M18.7 12.4h2.4l1.3 2.6h-3.7z" />
+      {/* Frame drawn in segments so it does not run through the wheels */}
+      <path d="M3 22.5h2.2M9.8 22.5h7.3M21.7 22.5h1.5" />
+      <circle cx="7.5" cy="22.5" r="2.3" />
+      <circle cx="19.4" cy="22.5" r="2.3" />
+      <circle cx="25.5" cy="22.5" r="2.3" />
+    </svg>
+  );
+}
+
 export function BoatIcon({ className = "" }: IconProps) {
   return (
     <svg viewBox="0 0 32 32" aria-hidden="true" className={className} {...strokeProps}>
@@ -89,6 +104,7 @@ export const coverageIcons: Record<string, ComponentType<IconProps>> = {
   auto: CarIcon,
   property: HomeIcon,
   commercial: BuildingIcon,
+  trucking: TruckIcon,
   boat: BoatIcon,
   umbrella: UmbrellaIcon,
   life: LifeIcon,

@@ -123,13 +123,15 @@ export default async function CoverageLinePage({
             <Reveal variant="left">
               <div className="relative mx-auto w-full max-w-[32rem]">
                 <div className="overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+                  {/* Same 3:2 frame as the hero: crop rather than stretch a
+                      source photo with a different ratio. */}
                   <Image
                     src={line.secondaryImage}
                     alt={line.secondaryImageAlt}
                     width={900}
                     height={600}
                     sizes="(min-width: 1024px) 32rem, 100vw"
-                    className="h-auto w-full"
+                    className="aspect-3/2 w-full object-cover"
                   />
                 </div>
               </div>

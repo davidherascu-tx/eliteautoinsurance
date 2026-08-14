@@ -11,7 +11,9 @@ export function CoverageCard({ line }: { line: CoverageLine }) {
       href={`/coverage/${line.slug}`}
       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] text-center transition-all duration-500 hover:-translate-y-1.5 hover:border-brand-400/30 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-brand-900/40"
     >
-      <div className="relative h-44 overflow-hidden">
+      {/* Tall enough that a square source photo still reads as a full scene
+          and a 3:2 one is barely cropped */}
+      <div className="relative h-56 overflow-hidden">
         <Image
           src={line.heroImage}
           alt={line.heroImageAlt}

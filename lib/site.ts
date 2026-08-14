@@ -8,7 +8,7 @@ export const site = {
   shortName: "Elite Auto",
   tagline: "We're covering all the insurance fields",
   description:
-    "Independent Houston insurance agency offering auto, property, commercial, boat, umbrella and life insurance. Se habla español. Get a free quote today.",
+    "Independent Houston insurance agency offering auto, property, commercial, trucking, boat, umbrella and life insurance. Se habla español. Get a free quote today.",
   url: "https://www.eliteautoinsurance.net",
   email: "quote@eliteautoinsurance.net",
   phone: "(713) 644-8000",
@@ -279,6 +279,67 @@ export const coverageLines: CoverageLine[] = [
       {
         q: "Is workers' compensation required in Texas?",
         a: "Texas does not require most private employers to carry it, but many contracts and general contractors do. We can quote it either way.",
+      },
+    ],
+  },
+  {
+    slug: "trucking",
+    name: "Commercial Trucking Insurance",
+    navLabel: "Trucking",
+    headline: "Trucking coverage that keeps your authority active and your loads moving",
+    summary:
+      "Primary liability, physical damage and motor truck cargo for owner-operators and small fleets — with federal filings handled for you and certificates in the broker's inbox the same day.",
+    cardText:
+      "Primary liability, physical damage, cargo and bobtail for owner-operators and fleets.",
+    menuText: "Primary liability, cargo and physical damage",
+    heroImage: "/trucking_1.webp",
+    heroImageAlt: "Blue semi truck pulling a dry van trailer on a highway",
+    secondaryImage: "/trucking_2.webp",
+    secondaryImageAlt: "Flatbed truck hauling a wheel loader at sunset",
+    covers: [
+      {
+        title: "Primary liability",
+        text: "The coverage your operating authority is built on — injuries and property damage you cause while on dispatch.",
+      },
+      {
+        title: "Physical damage",
+        text: "Repairs or replaces the tractor and trailer after a collision, rollover, fire, hail or theft.",
+      },
+      {
+        title: "Motor truck cargo",
+        text: "Pays for the freight itself when a load is damaged, stolen or lost in transit.",
+      },
+      {
+        title: "Non-trucking liability",
+        text: "Bobtail and personal-use coverage for the miles you run when you are off dispatch.",
+      },
+      {
+        title: "Trailer interchange",
+        text: "Covers damage to trailers you pull under an interchange or lease agreement but do not own.",
+      },
+      {
+        title: "Occupational accident",
+        text: "Medical and disability benefits for owner-operators, plus workers' compensation where a contract requires it.",
+      },
+    ],
+    highlights: [
+      "FMCSA filings and MCS-90 endorsements handled for you",
+      "Certificates of insurance sent to brokers and shippers the same day",
+      "New-authority owner-operators placed, not turned away",
+      "Reefer breakdown, hazmat and oilfield hauling quoted through specialty carriers",
+    ],
+    faqs: [
+      {
+        q: "How much liability coverage does the FMCSA require?",
+        a: "For interstate carriers hauling general freight in vehicles over 10,000 pounds, the federal minimum is $750,000 combined single limit. Hazmat runs to $1 million or $5 million depending on the commodity, and most brokers and shippers require $1 million by contract regardless. Texas intrastate limits are set separately and are often lower — we will confirm which applies to your operation.",
+      },
+      {
+        q: "Do I need cargo coverage if the shipper already has insurance?",
+        a: "Yes. The shipper's policy protects the shipper, not you, and your liability for the freight follows the bill of lading. Most brokers will not tender a load without at least $100,000 of motor truck cargo coverage on file.",
+      },
+      {
+        q: "Am I covered when I am not under dispatch?",
+        a: "Not by your primary liability policy — that coverage applies while you are in the business of the motor carrier. Non-trucking liability, often called bobtail coverage, fills the gap for personal use and deadhead miles.",
       },
     ],
   },

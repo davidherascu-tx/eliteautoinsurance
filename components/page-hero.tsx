@@ -93,6 +93,8 @@ export function PageHero({
               <div className="relative w-full max-w-[30rem]">
                 <div className="absolute -inset-4 rounded-[1.75rem] bg-gradient-to-br from-brand-500/20 via-transparent to-transparent blur-2xl" />
                 <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-navy-850 shadow-2xl shadow-black/50">
+                  {/* Every hero shares one 3:2 frame, so a source photo that is
+                      not 3:2 is cropped rather than stretched to fit it. */}
                   <Image
                     src={image.src}
                     alt={image.alt}
@@ -100,7 +102,7 @@ export function PageHero({
                     height={600}
                     priority
                     sizes="(min-width: 1024px) 30rem, 100vw"
-                    className="h-auto w-full"
+                    className="aspect-3/2 w-full object-cover"
                   />
                 </div>
               </div>
