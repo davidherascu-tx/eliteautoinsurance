@@ -14,13 +14,14 @@ import {
   Section,
   SectionHeading,
 } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { coverageLines, site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About Our Agency",
-  description: `${site.name} is an independent insurance agency serving ${site.areaServed}, with three offices and agents who speak English and Spanish.`,
-  alternates: { canonical: "/about" },
-};
+  description: `${site.name} is an independent agency serving the Greater Houston area, with three offices and agents who speak English and Spanish.`,
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

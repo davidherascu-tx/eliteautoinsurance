@@ -18,7 +18,13 @@ import {
   Section,
   SectionHeading,
 } from "@/components/ui";
-import { coverageLines, getCoverageLine, site } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
+import {
+  coverageLines,
+  getCoverageLine,
+  site,
+  type CoverageLine,
+} from "@/lib/site";
 
 export function generateStaticParams() {
   return coverageLines.map((line) => ({ slug: line.slug }));
@@ -36,16 +42,59 @@ export async function generateMetadata({
     return { title: "Coverage not found" };
   }
 
-  return {
+  return pageMetadata({
     title: line.name,
     description: line.summary,
-    alternates: { canonical: `/coverage/${line.slug}` },
-    openGraph: {
-      title: `${line.name} | ${site.name}`,
-      description: line.summary,
-      images: [{ url: line.heroImage }],
-    },
+    path: `/coverage/${line.slug}`,
+    images: [
+      { url: line.ogImage ?? line.heroImage, alt: line.heroImageAlt },
+    ],
+  });
+}
+
+/**
+ * Marks up the FAQ and the breadcrumb that this page already renders, so search
+ * engines can show them as rich results instead of inferring them from prose.
+ */
+function CoverageStructuredData({ line }: { line: CoverageLine }) {
+  const pageUrl = `${site.url}/coverage/${line.slug}`;
+
+  const data = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
+        mainEntity: line.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.q,
+          acceptedAnswer: { "@type": "Answer", text: faq.a },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Coverage",
+            item: `${site.url}/coverage`,
+          },
+          { "@type": "ListItem", position: 3, name: line.name, item: pageUrl },
+        ],
+      },
+    ],
   };
+
+  return (
+    <script
+      type="application/ld+json"
+      // Data is authored in this repo, not user input.
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
 }
 
 export default async function CoverageLinePage({
@@ -64,6 +113,7 @@ export default async function CoverageLinePage({
 
   return (
     <>
+      <CoverageStructuredData line={line} />
       <PageHero
         eyebrow={line.name}
         icon={<CoverageIcon slug={line.slug} className="size-4" />}

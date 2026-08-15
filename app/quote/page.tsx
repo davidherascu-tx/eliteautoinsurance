@@ -11,13 +11,14 @@ import {
   PinIcon,
   Section,
 } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { coverageLines, locations, site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Get a Free Insurance Quote",
-  description: `Request a free, no-obligation insurance quote from ${site.name}. Auto, property, commercial, trucking, boat, umbrella and life coverage in Houston. Se habla español.`,
-  alternates: { canonical: "/quote" },
-};
+  description: `Request a free, no-obligation quote from ${site.name}. Auto, property, commercial, trucking, boat, umbrella and life coverage in Houston. Se habla español.`,
+  path: "/quote",
+});
 
 const validSlugs = new Set(coverageLines.map((line) => line.slug));
 

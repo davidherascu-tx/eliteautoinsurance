@@ -91,6 +91,12 @@ export type CoverageLine = {
   secondaryImage: string;
   secondaryImageAlt: string;
   heroImageAlt: string;
+  /**
+   * Optional wide image for social cards. Social platforms crop to about 1.91:1,
+   * so a line whose hero photo is square or portrait can point here instead.
+   * Falls back to `heroImage`.
+   */
+  ogImage?: string;
   /** What the policy typically covers. */
   covers: { title: string; text: string }[];
   /** Reasons to buy, shown as a checklist. */
@@ -288,12 +294,14 @@ export const coverageLines: CoverageLine[] = [
     navLabel: "Trucking",
     headline: "Trucking coverage that keeps your authority active and your loads moving",
     summary:
-      "Primary liability, physical damage and motor truck cargo for owner-operators and small fleets — with federal filings handled for you and certificates in the broker's inbox the same day.",
+      "Primary liability, physical damage and motor truck cargo for owner-operators and small fleets — with federal filings handled and certificates sent the same day.",
     cardText:
       "Primary liability, physical damage, cargo and bobtail for owner-operators and fleets.",
     menuText: "Primary liability, cargo and physical damage",
     heroImage: "/trucking_1.webp",
     heroImageAlt: "Blue semi truck pulling a dry van trailer on a highway",
+    // The hero photo is square; this banner crop suits a social card.
+    ogImage: "/trucking_banner_1.webp",
     secondaryImage: "/trucking_2.webp",
     secondaryImageAlt: "Flatbed truck hauling a wheel loader at sunset",
     covers: [

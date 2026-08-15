@@ -4,7 +4,8 @@ import "./globals.css";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { locations, site } from "@/lib/site";
+import { socialImage } from "@/lib/seo";
+import { locations, site, type Location } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,13 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: `${site.name} | Houston Insurance Agency`,
     description: site.description,
+    images: [socialImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} | Houston Insurance Agency`,
+    description: site.description,
+    images: [socialImage.url],
   },
   alternates: {
     canonical: "/",
@@ -48,6 +56,64 @@ export const metadata: Metadata = {
 export const viewport = {
   themeColor: "#111d32",
 };
+
+const DAYS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
+/** "9:00am" -> "09:00". Returns null if the shape is not what we expect. */
+function to24Hour(value: string) {
+  const match = /^(\d{1,2}):(\d{2})\s*(am|pm)$/i.exec(value.trim());
+  if (!match) return null;
+
+  const meridiem = match[3].toLowerCase();
+  let hour = Number(match[1]) % 12;
+  if (meridiem === "pm") hour += 12;
+
+  return `${String(hour).padStart(2, "0")}:${match[2]}`;
+}
+
+/**
+ * Turns the display hours in lib/site.ts ("Tuesday – Thursday", "9:00am – 5:00pm")
+ * into schema.org openingHoursSpecification, so the offices can show opening
+ * times in local search.
+ *
+ * The display strings stay the single source of truth. Anything that does not
+ * parse is skipped rather than guessed at — publishing no hours is recoverable,
+ * publishing wrong ones is not.
+ */
+function openingHours(location: Location) {
+  const specs = [];
+
+  for (const entry of location.hours) {
+    const [open, close] = entry.time.split(/[–—-]/).map((part) => part.trim());
+    const opens = open ? to24Hour(open) : null;
+    const closes = close ? to24Hour(close) : null;
+    if (!opens || !closes) continue;
+
+    const [from, to] = entry.days.split(/[–—-]/).map((part) => part.trim());
+    const start = DAYS.indexOf(from);
+    if (start === -1) continue;
+
+    const end = to ? DAYS.indexOf(to) : start;
+    if (end === -1 || end < start) continue;
+
+    specs.push({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: DAYS.slice(start, end + 1),
+      opens,
+      closes,
+    });
+  }
+
+  return specs;
+}
 
 /** Local business structured data so the three offices show up in local search. */
 function StructuredData() {
@@ -72,6 +138,7 @@ function StructuredData() {
       },
       areaServed: site.areaServed,
       knowsLanguage: ["en", "es"],
+      openingHoursSpecification: openingHours(location),
     })),
   };
 

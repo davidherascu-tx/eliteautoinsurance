@@ -12,14 +12,15 @@ import {
   Section,
   SectionHeading,
 } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { coverageLines, site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Insurance Coverage",
   description:
     "Auto, property, commercial, trucking, boat, umbrella and life insurance from an independent Houston agency. Compare carriers and get a free quote.",
-  alternates: { canonical: "/coverage" },
-};
+  path: "/coverage",
+});
 
 export default function CoveragePage() {
   return (

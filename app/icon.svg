@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!--
+    Brand mark: the ShieldIcon from components/icons.tsx, filled instead of
+    stroked and scaled 1.15x about its centre so it fills the icon canvas.
+    Colours are the brand-400/600/700 tokens from app/globals.css.
+  -->
+  <defs>
+    <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#59a5fb" />
+      <stop offset="100%" stop-color="#1663d8" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(16 16.1) scale(1.15) translate(-16 -16.1)">
+    <path
+      d="M16 3.5 6 7.4v8.2c0 6.3 4.2 11.4 10 13.1 5.8-1.7 10-6.8 10-13.1V7.4L16 3.5Z"
+      fill="url(#shield)"
+      stroke="#124fae"
+      stroke-width="0.6"
+      stroke-linejoin="round"
+    />
+    <path
+      d="m11.5 15.8 3.2 3.3 6-6.2"
+      fill="none"
+      stroke="#ffffff"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+</svg>

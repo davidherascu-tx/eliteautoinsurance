@@ -14,13 +14,14 @@ import {
   Section,
   SectionHeading,
 } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { locations, mapsUrl, site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact & Office Hours",
   description: `Call ${site.phone} or visit one of our three Houston-area offices. Addresses, phone numbers and open hours for ${site.name}.`,
-  alternates: { canonical: "/contact" },
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

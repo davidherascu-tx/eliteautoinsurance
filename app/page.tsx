@@ -154,7 +154,7 @@ function Hero() {
                 </span>
                 <span>
                   <span className="block text-xl font-bold leading-none text-white">
-                    {coverageLines.length} lines
+                    All lines
                   </span>
                   <span className="mt-1 block text-xs text-slate-400">
                     of coverage, one agent
