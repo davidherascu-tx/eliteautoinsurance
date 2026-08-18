@@ -2,6 +2,7 @@
 
 import { Resend } from "resend";
 
+import { resolveMailConfig, sendEmail } from "@/lib/mailer";
 import {
   coverageLabel,
   parseQuoteForm,
@@ -120,12 +121,13 @@ export async function submitQuote(
     };
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.QUOTE_TO_EMAIL ?? site.email;
-  const from =
-    process.env.QUOTE_FROM_EMAIL ?? "Elite Auto Insurance <onboarding@resend.dev>";
+  const config = resolveMailConfig();
 
-  if (!apiKey) {
+  for (const warning of config.warnings) {
+    console.error(warning);
+  }
+
+  if (!config.apiKey) {
     console.error("RESEND_API_KEY is not set — quote email was not sent.");
     return {
       status: "error",
@@ -135,23 +137,38 @@ export async function submitQuote(
     };
   }
 
-  const resend = new Resend(apiKey);
+  const resend = new Resend(config.apiKey);
   const internal = buildInternalEmail(values);
 
-  const { error } = await resend.emails.send({
-    from,
-    to,
-    replyTo: values.email,
-    subject: `Quote request — ${coverageLabel(values.coverage)} — ${values.name}`,
-    html: internal.html,
-    text: internal.text,
-  });
+  // `from` is whichever sender was accepted, so the confirmation matches it.
+  const { failure, from } = await sendEmail(
+    resend,
+    {
+      to: config.to,
+      replyTo: values.email,
+      subject: `Quote request — ${coverageLabel(values.coverage)} — ${values.name}`,
+      html: internal.html,
+      text: internal.text,
+    },
+    config.from,
+  );
 
-  if (error) {
-    console.error("Resend failed to send the quote request:", error);
+  if (failure) {
+    console.error(
+      "Quote request could not be delivered:",
+      JSON.stringify({ ...failure, from: config.from, to: config.to }),
+    );
+    // The customer is told to call, but the lead itself must survive: these
+    // details stay in the logs so the request can still be followed up.
+    console.error("UNDELIVERED LEAD:", JSON.stringify(values));
+
+    const message = `We could not send your request. Please call us at ${site.phone} or email ${site.email}.`;
+
     return {
       status: "error",
-      message: `We could not send your request. Please call us at ${site.phone} or email ${site.email}.`,
+      message: config.debug
+        ? `${message} [${failure.name}: ${failure.message}]`
+        : message,
       errors: {},
       values,
     };
@@ -160,7 +177,7 @@ export async function submitQuote(
   // A failed confirmation should not make the customer think the request failed.
   try {
     const confirmation = buildConfirmationEmail(values);
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from,
       to: values.email,
       replyTo: site.email,
@@ -168,6 +185,10 @@ export async function submitQuote(
       html: confirmation.html,
       text: confirmation.text,
     });
+
+    if (error) {
+      console.error("Confirmation email rejected:", JSON.stringify(error));
+    }
   } catch (confirmationError) {
     console.error("Confirmation email failed:", confirmationError);
   }

@@ -19,8 +19,28 @@ The site runs at http://localhost:3000.
 | `RESEND_API_KEY`   | Yes      | Resend API key. Without it the quote form shows a "call us instead" message and sends nothing. |
 | `QUOTE_TO_EMAIL`   | No       | Inbox that receives quote requests. Defaults to `quote@eliteautoinsurance.net`.               |
 | `QUOTE_FROM_EMAIL` | No       | Sender address. Must be on a domain verified in Resend.                                       |
+| `QUOTE_DEBUG`      | No       | Set to `1` to show the mail provider's reason in the form's error message. Diagnostics only.   |
 
 To send from `quote@eliteautoinsurance.net`, add and verify `eliteautoinsurance.net` in the Resend dashboard (DNS records for SPF/DKIM). Until that is done, use `onboarding@resend.dev` as the sender — the default when `QUOTE_FROM_EMAIL` is unset.
+
+## Deploying (Netlify)
+
+Set `RESEND_API_KEY`, `QUOTE_TO_EMAIL` and `QUOTE_FROM_EMAIL` under **Site configuration → Environment variables**, then redeploy — environment variables are read when the deploy is built, so an existing deploy will not pick them up.
+
+Two rules differ from `.env.local`:
+
+- **Paste values without quotes.** `.env.local` strips the quotes around `QUOTE_FROM_EMAIL`; Netlify's dashboard does not, and a sender address wrapped in `"` is rejected by Resend.
+- **Scope must include Functions/Runtime.** A variable scoped to *Builds* only is invisible to the Server Action at request time.
+
+### If the form still fails
+
+The form is built not to depend on a perfect configuration:
+
+- A `QUOTE_FROM_EMAIL` that is blank, malformed, or wrapped in quotes is ignored in favour of `onboarding@resend.dev`.
+- If the provider **refuses** the configured sender — nearly always an unverified domain — the message is sent again from `onboarding@resend.dev`. The lead arrives; only the branding is lost, and the fallback is logged.
+- If delivery fails anyway, the full submission is written to the function log under `UNDELIVERED LEAD:` so the customer can still be contacted.
+
+To see what a deployment is actually using, set `QUOTE_DEBUG=1`, redeploy, and open **`/api/quote-check`**. It reports the resolved sender and recipient, a masked key preview, and the domains verified in the Resend account — the endpoint returns 404 unless `QUOTE_DEBUG` is set, and the key itself is never returned. Unset the variable once mail is flowing.
 
 ## Editing site content
 
