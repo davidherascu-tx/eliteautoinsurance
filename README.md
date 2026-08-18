@@ -6,11 +6,12 @@ Marketing site for Elite Auto Insurance, an independent insurance agency in the 
 
 ```bash
 npm install
-cp .env.example .env.local   # then fill in the values
 npm run dev
 ```
 
 The site runs at http://localhost:3000.
+
+The quote form needs a Resend key. Create a git-ignored `.env.local` holding `RESEND_API_KEY=re_...` — without it the form shows a "call us instead" message and sends nothing. Everything else has a working default.
 
 ## Environment variables
 
