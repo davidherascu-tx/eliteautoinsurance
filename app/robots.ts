@@ -7,6 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      // Not pages: the quote action's diagnostics endpoint has nothing to index.
+      disallow: "/api/",
     },
     sitemap: `${site.url}/sitemap.xml`,
   };

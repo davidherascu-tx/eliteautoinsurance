@@ -7,7 +7,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
   const staticRoutes = [
-    { path: "", priority: 1 },
+    // Trailing slash so this matches the home page's canonical exactly.
+    { path: "/", priority: 1 },
     { path: "/coverage", priority: 0.9 },
     { path: "/quote", priority: 0.9 },
     { path: "/contact", priority: 0.7 },

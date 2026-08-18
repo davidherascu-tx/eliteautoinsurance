@@ -9,7 +9,9 @@ export const site = {
   tagline: "We're covering all the insurance fields",
   description:
     "Independent Houston insurance agency offering auto, property, commercial, trucking, boat, umbrella and life insurance. Se habla español. Get a free quote today.",
-  url: "https://www.eliteautoinsurance.net",
+  // Netlify serves the bare domain and 301s www to it, so canonical URLs,
+  // the sitemap and og:url must use the bare form or they all point at a redirect.
+  url: "https://eliteautoinsurance.net",
   email: "quote@eliteautoinsurance.net",
   phone: "(713) 644-8000",
   phoneHref: "tel:+17136448000",

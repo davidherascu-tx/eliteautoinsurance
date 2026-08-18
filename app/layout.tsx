@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { readEnv } from "@/lib/env";
 import { socialImage } from "@/lib/seo";
 import { locations, site, type Location } from "@/lib/site";
 
@@ -50,6 +51,21 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  // Search Console's "HTML tag" method. Read at build time, so adding the token
+  // to the host needs a redeploy before Google can see it.
+  verification: {
+    google: readEnv("GOOGLE_SITE_VERIFICATION"),
   },
 };
 

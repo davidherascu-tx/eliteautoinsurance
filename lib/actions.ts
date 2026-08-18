@@ -3,6 +3,7 @@
 import { Resend } from "resend";
 
 import { resolveMailConfig, sendEmail } from "@/lib/mailer";
+import { recordSubmission } from "@/lib/rate-limit";
 import {
   coverageLabel,
   parseQuoteForm,
@@ -68,34 +69,6 @@ function buildInternalEmail(values: ParsedQuote) {
   return { html, text };
 }
 
-function buildConfirmationEmail(values: ParsedQuote) {
-  const spanish = values.language === "spanish";
-
-  const heading = spanish
-    ? "Gracias por comunicarse con nosotros"
-    : "Thanks for reaching out";
-  const body = spanish
-    ? `Recibimos su solicitud de cotización para ${coverageLabel(values.coverage)}. Un agente le contactará durante nuestro horario de oficina. Si necesita ayuda de inmediato, llámenos al ${site.phone}.`
-    : `We received your quote request for ${coverageLabel(values.coverage)}. An agent will get back to you during business hours. If you need help right away, call us at ${site.phone}.`;
-
-  return {
-    subject: spanish
-      ? `Recibimos su solicitud — ${site.name}`
-      : `We received your quote request — ${site.name}`,
-    html: `
-      <div style="font-family:Arial,Helvetica,sans-serif;color:#0d1522;max-width:600px">
-        <h2 style="margin:0 0 12px">${heading}, ${escapeHtml(values.name)}</h2>
-        <p style="line-height:1.6;margin:0 0 16px">${escapeHtml(body)}</p>
-        <p style="line-height:1.6;margin:0;color:#475569">
-          ${escapeHtml(site.name)}<br />
-          ${escapeHtml(site.phone)}<br />
-          ${escapeHtml(site.email)}
-        </p>
-      </div>`,
-    text: `${heading}, ${values.name}\n\n${body}\n\n${site.name}\n${site.phone}\n${site.email}`,
-  };
-}
-
 export async function submitQuote(
   _prevState: QuoteState,
   formData: FormData,
@@ -137,11 +110,24 @@ export async function submitQuote(
     };
   }
 
+  // Checked here rather than on arrival, so a customer mistyping their email
+  // does not spend their own allowance on attempts that were never sent.
+  const limit = await recordSubmission();
+
+  if (!limit.allowed) {
+    console.warn("Quote request refused by rate limit:", limit.reason);
+    return {
+      status: "error",
+      message: `We have already received a request from you. Please call us at ${site.phone} if it is urgent.`,
+      errors: {},
+      values,
+    };
+  }
+
   const resend = new Resend(config.apiKey);
   const internal = buildInternalEmail(values);
 
-  // `from` is whichever sender was accepted, so the confirmation matches it.
-  const { failure, from } = await sendEmail(
+  const { failure } = await sendEmail(
     resend,
     {
       to: config.to,
@@ -172,25 +158,6 @@ export async function submitQuote(
       errors: {},
       values,
     };
-  }
-
-  // A failed confirmation should not make the customer think the request failed.
-  try {
-    const confirmation = buildConfirmationEmail(values);
-    const { error } = await resend.emails.send({
-      from,
-      to: values.email,
-      replyTo: site.email,
-      subject: confirmation.subject,
-      html: confirmation.html,
-      text: confirmation.text,
-    });
-
-    if (error) {
-      console.error("Confirmation email rejected:", JSON.stringify(error));
-    }
-  } catch (confirmationError) {
-    console.error("Confirmation email failed:", confirmationError);
   }
 
   return {
